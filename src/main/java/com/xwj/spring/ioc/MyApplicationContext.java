@@ -50,6 +50,22 @@ public class MyApplicationContext {
 	}
 
 	/**
+	 * 获取beanFactory
+	 */
+	public Map<String, Object> getBeanFactory() {
+		return beanFactory;
+	}
+
+	/**
+	 * 更新beanFactory
+	 */
+	public void updateBeanFactory(String beanName, Object bean) {
+		if (StringUtils.isNotBlank(beanName)) {
+			beanFactory.put(beanName, bean);
+		}
+	}
+
+	/**
 	 * 类加载器
 	 */
 	private void classLoader() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
@@ -130,7 +146,7 @@ public class MyApplicationContext {
 							List<Object> list = findSuperInterfaceByIoc(field.getType());
 							if (list != null && list.size() > 0) {
 								if (list.size() > 1) {
-   									throw new RuntimeException(
+									throw new RuntimeException(
 											obj.getClass() + "  注入接口 " + field.getType() + "   失败，请在注解中指定需要注入的具体实现类");
 								} else {
 									field.set(obj, list.get(0));
