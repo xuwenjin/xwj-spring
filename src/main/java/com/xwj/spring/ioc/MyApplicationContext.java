@@ -119,8 +119,7 @@ public class MyApplicationContext {
 	/**
 	 * 依赖注入(实例化带有@MyAutowired的类、对有@MyValue的属性赋值)
 	 */
-	private void addAutowiredToField(Object obj)
-			throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+	private void addAutowiredToField(Object obj) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
 		Field[] fields = obj.getClass().getDeclaredFields();
 		for (Field field : fields) {
 			if (field.getAnnotation(MyAutowired.class) != null) {
@@ -146,22 +145,19 @@ public class MyApplicationContext {
 							List<Object> list = findSuperInterfaceByIoc(field.getType());
 							if (list != null && list.size() > 0) {
 								if (list.size() > 1) {
-									throw new RuntimeException(
-											obj.getClass() + "  注入接口 " + field.getType() + "   失败，请在注解中指定需要注入的具体实现类");
+									throw new RuntimeException(obj.getClass() + "  注入接口 " + field.getType() + "   失败，请在注解中指定需要注入的具体实现类");
 								} else {
 									field.set(obj, list.get(0));
 									// 递归依赖注入
 									addAutowiredToField(field.getType());
 								}
 							} else {
-								throw new RuntimeException("当前类" + obj.getClass() + "  不能注入接口 "
-										+ field.getType().getClass() + "  ， 接口没有实现类不能被实例化");
+								throw new RuntimeException("当前类" + obj.getClass() + "  不能注入接口 " + field.getType().getClass() + "  ， 接口没有实现类不能被实例化");
 							}
 						}
 					}
 				} else {
-					String beanName = StringUtils.isEmpty(autowiredValue) ? lowerCaseFirst(field.getName())
-							: lowerCaseFirst(autowiredValue);
+					String beanName = StringUtils.isEmpty(autowiredValue) ? lowerCaseFirst(field.getName()) : lowerCaseFirst(autowiredValue);
 					Object beanObj = beanFactory.get(beanName);
 					field.set(obj, beanObj == null ? field.getType().newInstance() : beanObj);
 					System.out.println("依赖注入" + field.getName());
@@ -171,8 +167,7 @@ public class MyApplicationContext {
 			if (field.getAnnotation(MyValue.class) != null) {
 				field.setAccessible(true);
 				MyValue value = field.getAnnotation(MyValue.class);
-				field.set(obj, StringUtils.isNotEmpty(value.value())
-						? ConfigurationUtils.getPropertiesByKey(value.value()) : null);
+				field.set(obj, StringUtils.isNotEmpty(value.value()) ? ConfigurationUtils.getPropertiesByKey(value.value()) : null);
 				System.out.println("注入配置文件  " + obj.getClass() + " 加载配置属性" + value.value());
 			}
 		}
@@ -226,7 +221,7 @@ public class MyApplicationContext {
 		if (!StringUtils.isEmpty(str)) {
 			char[] cs = str.toCharArray();
 			if (Character.isLowerCase(cs[0])) {
-				cs[0] += 32;
+				cs[0] -= 32;
 			}
 			return String.valueOf(cs);
 		}
@@ -236,7 +231,7 @@ public class MyApplicationContext {
 	/**
 	 * 将字符串首字母变成小写(通过ASCII编码前移)
 	 */
-	public static String lowerCaseFirst(String name) {
+	protected static String lowerCaseFirst(String name) {
 		if (!StringUtils.isEmpty(name)) {
 			char[] cs = name.toCharArray();
 			if (Character.isUpperCase(cs[0])) {
