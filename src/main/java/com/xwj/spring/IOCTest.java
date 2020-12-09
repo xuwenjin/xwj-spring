@@ -11,6 +11,9 @@ public class IOCTest {
 	public static void main(String[] args) throws Exception {
 		// 1、初始化Bean(IOC容器)
 		MyApplicationContext applicationContext = new MyApplicationContext();
+		applicationContext.getBeanFactory().forEach((key, value) -> {
+			System.out.println(key + "-->" + value);
+		});
 
 		// 2、从容器中获取bean
 		LoginController loginController = (LoginController) applicationContext.getIocBean("loginController");

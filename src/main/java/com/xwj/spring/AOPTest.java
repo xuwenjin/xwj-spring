@@ -14,9 +14,12 @@ public class AOPTest {
 
 	static MyApplicationContext applicationContext;
 
-	public static void main(String[] args)
-			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	/**
+	 * 加上了@MyAspect注解的类，在spring容器初始化后，会生成该bean的代理对象并放入容器中
+	 */
+	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		String beanName = "subjectImpl";
+		// 此时的bean是代理对象
 		Object bean = applicationContext.getIocBean(beanName);
 		ISubject subject = (ISubject) bean;
 		subject.add(2, 3);
