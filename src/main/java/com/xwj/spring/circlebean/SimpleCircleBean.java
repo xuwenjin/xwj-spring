@@ -34,6 +34,7 @@ public class SimpleCircleBean {
 	public static void main(String[] args) throws Exception {
 		System.out.println(getBean(BService.class).getaService() == getBean(AService.class));
 		System.out.println(getBean(AService.class).getbService() == getBean(BService.class));
+		System.out.println(getBean(AService.class).getbService().getaService() == getBean(AService.class));
 
 		System.out.println(getBean(AService.class).hello());
 		System.out.println(getBean(BService.class).hello());
